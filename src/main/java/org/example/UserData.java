@@ -17,6 +17,4 @@ public class UserData {
         final String name = "Elena";
         return new User(email, password, name);
     }
-
-
 }

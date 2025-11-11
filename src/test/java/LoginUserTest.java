@@ -1,38 +1,31 @@
-package chrome;
+import io.qameta.allure.Description;
+import io.restassured.RestAssured;
+import org.example.*;
+import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
 
-import io.qameta.allure.Description;
-import io.restassured.RestAssured;
-import org.example.LoginPage;
-import org.example.MainPage;
-import org.example.RegisterPage;
-import org.example.RecoverPasswordPage;
-import org.example.User;
-import org.example.UserData;
-import org.example.UserMethods;
-import org.junit.jupiter.api.*;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.support.ui.WebDriverWait;
+@ExtendWith(DriverExtension.class)
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+public class LoginUserTest {
 
-
-public class LoginUserChromeTest {
-
-        private User user;
-        public String accessToken;
-        private WebDriver driver;
-        public WebDriverWait wait;
+    private User user;
+    private String accessToken;
+    private WebDriver driver;
+    public WebDriverWait wait;
 
     @BeforeEach
-    public void setUp() {
-        RestAssured.baseURI = UserMethods.baseURL;
+    public void setUp(WebDriver driver) {
 
-        driver = new ChromeDriver();
         driver.get(UserMethods.baseURL);
         driver.manage().window().maximize();
 
         wait = new WebDriverWait(driver, Duration.ofSeconds(3));
+
+        RestAssured.baseURI = UserMethods.baseURL;
 
         user = UserData.createUser();
         accessToken = UserMethods.createNewUser(user)
@@ -44,7 +37,7 @@ public class LoginUserChromeTest {
     @Test
     @Description("Проверка авторизации через главную страницу")
     @DisplayName("Проверка авторизации через главную страницу")
-    void AuthorizationMainPageTest() {
+    void authorizationMainPageTest(WebDriver driver) {
         MainPage mainPage = new MainPage(driver);
         LoginPage loginPage = new LoginPage(driver);
 
@@ -56,7 +49,7 @@ public class LoginUserChromeTest {
     @Test
     @DisplayName("Вход через кнопку «Личный кабинет»")
     @Description("Проверка входа через кнопку личного кабинета")
-    void ProfilePageTest() {
+    void profilePageTest(WebDriver driver) {
         MainPage mainPage = new MainPage(driver);
         LoginPage loginPage = new LoginPage(driver);
 
@@ -68,7 +61,7 @@ public class LoginUserChromeTest {
     @Test
     @DisplayName("Вход через кнопку в форме регистрации")
     @Description("Проверка входа через форму регистрации")
-    void RegisterPageTest() {
+    void registerPageTest(WebDriver driver) {
         MainPage mainPage = new MainPage(driver);
         LoginPage loginPage = new LoginPage(driver);
         RegisterPage registerPage = new RegisterPage(driver);
@@ -84,7 +77,7 @@ public class LoginUserChromeTest {
     @Test
     @DisplayName("Вход через кнопку в форме восстановления пароля")
     @Description("Проверка входа через форму восстановления пароля")
-    void loginRecoverPasswordTest() {
+    void loginRecoverPasswordTest(WebDriver driver) {
         MainPage mainPage = new MainPage(driver);
         LoginPage loginPage = new LoginPage(driver);
         RecoverPasswordPage recoverPasswordPage = new RecoverPasswordPage(driver);
@@ -102,9 +95,11 @@ public class LoginUserChromeTest {
         if (driver != null) {
             driver.quit();
         }
+        if (accessToken != null) {
+            UserMethods.deleteUser(accessToken);
+        }
     }
 }
-
 
 
 

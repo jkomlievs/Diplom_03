@@ -12,6 +12,8 @@ public class UserMethods {
     public static String userLoginPath = "/api/auth/login";
     public static String userPath = "/api/auth/user";
     public static String userRegisterPath = "api/auth/register";
+    public static final int IMPLICIT_WAIT = 7;
+
 
     @Step("Создаю пользователя")
     public static Response createNewUser(User user) {

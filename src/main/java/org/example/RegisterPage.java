@@ -44,6 +44,7 @@ public class RegisterPage {
     }
 
     public String getMessagePasswordError() {
+
         return driver.findElement(passwordError).getText();
     }
 
@@ -53,5 +54,5 @@ public class RegisterPage {
     public By passwordField = By.xpath(".//label[text()='Пароль']/../input"); //Локатор для нажатия поля Ввести пароль
     public By passwordError = By.xpath(".//p[text()='Некорректный пароль']"); //Локатор для уведомления об ошибке в пароле
     public By registerButton = By.xpath("//button[contains(text(),'Зарегистрироваться')]"); //Локатор для кнопки регистрации
-
+    public By registrationButton = By.xpath(".//button[text()='Зарегистрироваться']");
 }
